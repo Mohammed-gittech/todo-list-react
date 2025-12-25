@@ -3,11 +3,13 @@ import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-//
+//Divider
 import Divider from "@mui/material/Divider";
 // Button
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+//
+import Todo from "./Todo";
 
 export default function TodoList() {
   return (
@@ -28,6 +30,8 @@ export default function TodoList() {
             <Button>الكل</Button>
           </ButtonGroup>
           {/* End Button */}
+
+          <Todo />
         </CardContent>
       </Card>
       {/* End Carde */}
