@@ -20,9 +20,16 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+//
+import TextField from "@mui/material/TextField";
 
 export default function Todo({ todo }) {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [updateTodo, setUpdateTodo] = useState({
+    title: todo.title,
+    details: todo.details,
+  });
   const { todos, setTodos } = useContext(TodosContext);
   // Event Handlers
   function handleCheckClick() {
@@ -33,26 +40,49 @@ export default function Todo({ todo }) {
     );
   }
 
-  //
+  //start Handle Delete Dailog
   function handleShowDialog() {
-    setShowDialog(true);
+    setShowDeleteDialog(true);
   }
 
-  function handleCloseDialog() {
-    setShowDialog(false);
+  function handleDeleteDialogClose() {
+    setShowDeleteDialog(false);
   }
 
   function handleDeleteConfirm() {
     const newTodos = todos.filter((t) => t.id !== todo.id);
     setTodos(newTodos);
   }
+  //End Handle Delete Dailog
+  function handleShowUpdateDialog() {
+    setShowUpdateDialog(true);
+  }
+
+  function handleUpdateDialogClose() {
+    setShowUpdateDialog(false);
+  }
+
+  function handleUpdateConfirm() {
+    const updateTodos = todos.map((t) =>
+      t.id === todo.id
+        ? { ...t, title: updateTodo.title, details: updateTodo.details }
+        : t
+    );
+    setTodos(updateTodos);
+    setShowUpdateDialog(false);
+  }
+
+  //start Handle Update Dailog
+
+  //End Handle Update Dailog
   // ==== Event Handlers ===
   return (
     <>
+      {/* Delete Dialog */}
       <Dialog
         sx={{ direction: "rtl" }}
-        open={showDialog}
-        onClose={handleCloseDialog}
+        open={showDeleteDialog}
+        onClose={handleDeleteDialogClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -65,12 +95,60 @@ export default function Todo({ todo }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>إغلاق</Button>
+          <Button onClick={handleDeleteDialogClose}>إغلاق</Button>
           <Button onClick={handleDeleteConfirm} autoFocus>
             نعم، قم بالحذف
           </Button>
         </DialogActions>
       </Dialog>
+      {/*==== Delete Dialog ====*/}
+      {/* Update Dailog */}
+      <Dialog
+        sx={{ direction: "rtl" }}
+        open={showUpdateDialog}
+        onClose={handleUpdateDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"تعديل المهمة"}</DialogTitle>
+        <DialogContent>
+          <TextField
+            value={updateTodo.title}
+            onChange={(e) =>
+              setUpdateTodo({ ...updateTodo, title: e.target.value })
+            }
+            autoFocus
+            required
+            margin="dense"
+            id="title"
+            name="title"
+            label="عنوان المهمة"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            value={updateTodo.details}
+            onChange={(e) =>
+              setUpdateTodo({ ...updateTodo, details: e.target.value })
+            }
+            autoFocus
+            required
+            margin="dense"
+            id="details"
+            name="details"
+            label="التفاصيل"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdateDialogClose}>إغلاق</Button>
+          <Button onClick={handleUpdateConfirm} autoFocus>
+            تاكيد
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* == Update Dailog == */}
       {/* Start Carde */}
       <Card
         className="todoCard"
@@ -110,7 +188,10 @@ export default function Todo({ todo }) {
                 <CheckIcon />
               </IconButton>
               {/*== Check icon ==*/}
+
+              {/* Update Icon */}
               <IconButton
+                onClick={handleShowUpdateDialog}
                 className="iconButton"
                 aria-label="Edit"
                 sx={{
@@ -121,6 +202,8 @@ export default function Todo({ todo }) {
               >
                 <ModeEditOutlineOutlinedIcon />
               </IconButton>
+              {/*== Update Icon ==*/}
+
               {/* Delete Icon */}
               <IconButton
                 onClick={handleShowDialog}
