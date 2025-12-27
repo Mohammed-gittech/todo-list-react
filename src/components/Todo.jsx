@@ -12,10 +12,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 
 import { TodosContext } from "../contexts/TodosContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+// Dialog
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 export default function Todo({ todo }) {
+  const [showDialog, setShowDialog] = useState(false);
   const { todos, setTodos } = useContext(TodosContext);
+  // Event Handlers
   function handleCheckClick() {
     setTodos((todos) =>
       todos.map((t) =>
@@ -24,12 +33,44 @@ export default function Todo({ todo }) {
     );
   }
 
-  function handleDeleteClick() {
+  //
+  function handleShowDialog() {
+    setShowDialog(true);
+  }
+
+  function handleCloseDialog() {
+    setShowDialog(false);
+  }
+
+  function handleDeleteConfirm() {
     const newTodos = todos.filter((t) => t.id !== todo.id);
     setTodos(newTodos);
   }
+  // ==== Event Handlers ===
   return (
     <>
+      <Dialog
+        sx={{ direction: "rtl" }}
+        open={showDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"هل أنت متأكد من رغبتك في حذف المهمة؟"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            الا يمكنك التراجع عن الحذف بعد إتمامه
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>إغلاق</Button>
+          <Button onClick={handleDeleteConfirm} autoFocus>
+            نعم، قم بالحذف
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* Start Carde */}
       <Card
         className="todoCard"
@@ -80,10 +121,9 @@ export default function Todo({ todo }) {
               >
                 <ModeEditOutlineOutlinedIcon />
               </IconButton>
+              {/* Delete Icon */}
               <IconButton
-                onClick={() => {
-                  handleDeleteClick();
-                }}
+                onClick={handleShowDialog}
                 className="iconButton"
                 aria-label="Delete"
                 sx={{
@@ -94,6 +134,7 @@ export default function Todo({ todo }) {
               >
                 <DeleteIcon />
               </IconButton>
+              {/*=== Delete Icon ===*/}
               {/* == Action Button ==*/}
             </Grid>
           </Grid>
