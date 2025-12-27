@@ -18,42 +18,16 @@ import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
 // Use State
 import { useState } from "react";
-
-let todoList = [
-  {
-    id: uuidv4(),
-    title: "كتاب",
-    details: "مهاميمهاميمهاميمهامي",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "كتاب",
-    details: "مهاميمهاميمهاميمهامي",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "كتاب",
-    details: "مهاميمهاميمهاميمهامي",
-    isCompleted: false,
-  },
-];
+import { TodosContext } from "../contexts/TodosContext";
+import { useContext } from "react";
 
 export default function TodoList() {
-  const [todos, setTodos] = useState(todoList);
+  const { todos, setTodos } = useContext(TodosContext);
+
   const [titleInput, setTitleInput] = useState("");
 
-  function handleCheckClick(todoId) {
-    setTodos((todos) =>
-      todos.map((todo) =>
-        todo.id === todoId ? { ...todo, isCompleted: !todo.isCompleted } : todo
-      )
-    );
-  }
-
   const todosJsx = todos.map((todo) => {
-    return <Todo key={todo.id} todo={todo} handleCheck={handleCheckClick} />;
+    return <Todo key={todo.id} todo={todo} />;
   });
 
   function handleAddClick() {

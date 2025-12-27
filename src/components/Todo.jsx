@@ -11,13 +11,22 @@ import DeleteIcon from "@mui/icons-material/Delete";
 //
 import IconButton from "@mui/material/IconButton";
 
-export default function Todo({ todo, handleCheck }) {
+import { TodosContext } from "../contexts/TodosContext";
+import { useContext } from "react";
+
+export default function Todo({ todo }) {
+  const { todos, setTodos } = useContext(TodosContext);
   function handleCheckClick() {
-    handleCheck(todo.id);
+    setTodos((todos) =>
+      todos.map((t) =>
+        t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
+      )
+    );
   }
 
   function handleDeleteClick() {
-    alert("Delete");
+    const newTodos = todos.filter((t) => t.id !== todo.id);
+    setTodos(newTodos);
   }
   return (
     <>
