@@ -10,8 +10,63 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 //
 import Todo from "./Todo";
+//
+import Grid from "@mui/material/Grid";
+//
+import TextField from "@mui/material/TextField";
+// Others
+import { v4 as uuidv4 } from "uuid";
+// Use State
+import { useState } from "react";
+
+let todoList = [
+  {
+    id: uuidv4(),
+    title: "كتاب",
+    details: "مهاميمهاميمهاميمهامي",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "كتاب",
+    details: "مهاميمهاميمهاميمهامي",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "كتاب",
+    details: "مهاميمهاميمهاميمهامي",
+    isCompleted: false,
+  },
+];
 
 export default function TodoList() {
+  const [todos, setTodos] = useState(todoList);
+  const [titleInput, setTitleInput] = useState("");
+
+  function handleCheckClick(todoId) {
+    setTodos((todos) =>
+      todos.map((todo) =>
+        todo.id === todoId ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      )
+    );
+  }
+
+  const todosJsx = todos.map((todo) => {
+    return <Todo key={todo.id} todo={todo} handleCheck={handleCheckClick} />;
+  });
+
+  function handleAddClick() {
+    const newTodos = {
+      id: uuidv4(),
+      title: titleInput,
+      details: "",
+      isCompleted: false,
+    };
+
+    setTodos([...todos, newTodos]);
+  }
+
   return (
     <Container maxWidth="sm" style={{ textAlign: "center" }}>
       {/* Start Carde */}
@@ -31,7 +86,31 @@ export default function TodoList() {
           </ButtonGroup>
           {/* End Button */}
 
-          <Todo />
+          {todosJsx}
+
+          <Grid container spacing={2} sx={{ mt: 5 }}>
+            <Grid size={8}>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-basic"
+                label="عنوان المهمة"
+                variant="outlined"
+                value={titleInput}
+                onChange={(e) => setTitleInput(e.target.value)}
+              />
+            </Grid>
+            <Grid size={4}>
+              <Button
+                sx={{ width: "100%", height: "100%" }}
+                variant="contained"
+                onClick={() => {
+                  handleAddClick();
+                }}
+              >
+                اضافة
+              </Button>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
       {/* End Carde */}

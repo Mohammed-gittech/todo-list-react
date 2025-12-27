@@ -11,7 +11,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 //
 import IconButton from "@mui/material/IconButton";
 
-export default function Todo() {
+export default function Todo({ todo, handleCheck }) {
+  function handleCheckClick() {
+    handleCheck(todo.id);
+  }
+
+  function handleDeleteClick() {
+    alert("Delete");
+  }
   return (
     <>
       {/* Start Carde */}
@@ -27,10 +34,8 @@ export default function Todo() {
         <CardContent>
           <Grid container spacing={2}>
             <Grid size={8} sx={{ textAlign: "right", color: "white" }}>
-              <Typography variant="h5">مهامي</Typography>
-              <Typography variant="h6">
-                التفاصيل الخاصة بالمهمة الاولى
-              </Typography>
+              <Typography variant="h5">{todo.title}</Typography>
+              <Typography variant="h6">{todo.details}</Typography>
             </Grid>
             <Grid
               size={4}
@@ -39,17 +44,22 @@ export default function Todo() {
               alignItems="center"
             >
               {/* Action Button */}
+              {/* Check icon */}
               <IconButton
+                onClick={() => {
+                  handleCheckClick();
+                }}
                 className="iconButton"
                 aria-label="CheckIcon"
                 sx={{
-                  bgcolor: "white",
-                  color: "green",
-                  border: "3px solid green",
+                  bgcolor: todo.isCompleted ? "#8bc34a" : "white",
+                  color: todo.isCompleted ? "white" : "#8bc34a",
+                  border: "3px solid #8bc34a",
                 }}
               >
                 <CheckIcon />
               </IconButton>
+              {/*== Check icon ==*/}
               <IconButton
                 className="iconButton"
                 aria-label="Edit"
@@ -62,6 +72,9 @@ export default function Todo() {
                 <ModeEditOutlineOutlinedIcon />
               </IconButton>
               <IconButton
+                onClick={() => {
+                  handleDeleteClick();
+                }}
                 className="iconButton"
                 aria-label="Delete"
                 sx={{
