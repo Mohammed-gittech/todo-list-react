@@ -17,9 +17,8 @@ import TextField from "@mui/material/TextField";
 // Others
 import { v4 as uuidv4 } from "uuid";
 // Use State
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TodosContext } from "../contexts/TodosContext";
-import { useContext } from "react";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
@@ -30,6 +29,11 @@ export default function TodoList() {
     return <Todo key={todo.id} todo={todo} />;
   });
 
+  useEffect(() => {
+    const storageTodos = JSON.parse(localStorage.getItem("todo"));
+    setTodos(storageTodos);
+  }, []);
+
   function handleAddClick() {
     const newTodos = {
       id: uuidv4(),
@@ -38,7 +42,10 @@ export default function TodoList() {
       isCompleted: false,
     };
 
-    setTodos([...todos, newTodos]);
+    const updatedTodos = [...todos, newTodos];
+    setTodos(updatedTodos);
+    localStorage.setItem("todo", JSON.stringify(updatedTodos));
+    setTitleInput("");
   }
 
   return (

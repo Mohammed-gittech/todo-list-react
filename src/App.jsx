@@ -35,6 +35,7 @@ let todoList = [
 
 function App() {
   const [todos, setTodos] = useState(todoList);
+
   return (
     <ThemeProvider theme={theme}>
       <div

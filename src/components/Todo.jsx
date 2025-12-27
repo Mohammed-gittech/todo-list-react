@@ -33,11 +33,12 @@ export default function Todo({ todo }) {
   const { todos, setTodos } = useContext(TodosContext);
   // Event Handlers
   function handleCheckClick() {
-    setTodos((todos) =>
-      todos.map((t) =>
-        t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
-      )
+    const updatedTodos = todos.map((t) =>
+      t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
     );
+
+    setTodos(updatedTodos);
+    localStorage.setItem("todo", JSON.stringify(updatedTodos));
   }
 
   //start Handle Delete Dailog
@@ -52,6 +53,7 @@ export default function Todo({ todo }) {
   function handleDeleteConfirm() {
     const newTodos = todos.filter((t) => t.id !== todo.id);
     setTodos(newTodos);
+    localStorage.setItem("todo", JSON.stringify(newTodos));
   }
   //End Handle Delete Dailog
   function handleShowUpdateDialog() {
@@ -63,12 +65,13 @@ export default function Todo({ todo }) {
   }
 
   function handleUpdateConfirm() {
-    const updateTodos = todos.map((t) =>
+    const updatedTodos = todos.map((t) =>
       t.id === todo.id
         ? { ...t, title: updateTodo.title, details: updateTodo.details }
         : t
     );
-    setTodos(updateTodos);
+    setTodos(updatedTodos);
+    localStorage.setItem("todo", JSON.stringify(updatedTodos));
     setShowUpdateDialog(false);
   }
 
