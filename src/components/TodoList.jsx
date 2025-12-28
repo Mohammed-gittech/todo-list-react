@@ -7,7 +7,8 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 // Button
 import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 //
 import Todo from "./Todo";
 //
@@ -22,10 +23,23 @@ import { TodosContext } from "../contexts/TodosContext";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
-
   const [titleInput, setTitleInput] = useState("");
+  const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
-  const todosJsx = todos.map((todo) => {
+  //   Handle display completed or not completed
+  const completedTodos = todos.filter((t) => t.isCompleted);
+  const notCompletedTodos = todos.filter((t) => !t.isCompleted);
+
+  let todosToBeRendered = todos;
+
+  if (displayedTodosType === "completed") {
+    todosToBeRendered = completedTodos;
+  } else if (displayedTodosType === "non-completed") {
+    todosToBeRendered = notCompletedTodos;
+  }
+  //===  Handle display completed or not completed
+
+  const todosJsx = todosToBeRendered.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
   });
 
@@ -33,6 +47,10 @@ export default function TodoList() {
     const storageTodos = JSON.parse(localStorage.getItem("todo"));
     setTodos(storageTodos);
   }, []);
+
+  function changeDisplayedType(e) {
+    setDisplayedTodosType(e.target.value);
+  }
 
   function handleAddClick() {
     const newTodos = {
@@ -56,15 +74,19 @@ export default function TodoList() {
           <Typography variant="h2">مهامي</Typography>
           <Divider />
           {/* Start Button */}
-          <ButtonGroup
-            variant="contained"
-            aria-label="Basic button group"
+          <ToggleButtonGroup
             sx={{ mt: "30px", direction: "ltr", borderRadius: "20px" }}
+            color="primary"
+            value={displayedTodosType}
+            onChange={changeDisplayedType}
+            exclusive
+            // onChange={handleChange}
+            aria-label="Platform"
           >
-            <Button>غير المنجز</Button>
-            <Button>المنجز</Button>
-            <Button>الكل</Button>
-          </ButtonGroup>
+            <ToggleButton value="non-completed">غير المنجز</ToggleButton>
+            <ToggleButton value="completed">المنجز</ToggleButton>
+            <ToggleButton value="all">الكل</ToggleButton>
+          </ToggleButtonGroup>
           {/* End Button */}
 
           {todosJsx}
