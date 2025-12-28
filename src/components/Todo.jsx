@@ -12,24 +12,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 
 import { TodosContext } from "../contexts/TodosContext";
-import { useContext, useState } from "react";
-// Dialog
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import { useContext } from "react";
+
 //
 import TextField from "@mui/material/TextField";
 
-export default function Todo({ todo }) {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
-  const [updateTodo, setUpdateTodo] = useState({
-    title: todo.title,
-    details: todo.details,
-  });
+export default function Todo({ todo, showDelete, showUpdate }) {
   const { todos, setTodos } = useContext(TodosContext);
   // Event Handlers
   function handleCheckClick() {
@@ -42,116 +30,19 @@ export default function Todo({ todo }) {
   }
 
   //start Handle Delete Dailog
-  function handleShowDialog() {
-    setShowDeleteDialog(true);
-  }
-
-  function handleDeleteDialogClose() {
-    setShowDeleteDialog(false);
-  }
-
-  function handleDeleteConfirm() {
-    const newTodos = todos.filter((t) => t.id !== todo.id);
-    setTodos(newTodos);
-    localStorage.setItem("todo", JSON.stringify(newTodos));
+  function showDeleteDialog() {
+    showDelete(todo);
   }
   //End Handle Delete Dailog
-  function handleShowUpdateDialog() {
-    setShowUpdateDialog(true);
-  }
-
-  function handleUpdateDialogClose() {
-    setShowUpdateDialog(false);
-  }
-
-  function handleUpdateConfirm() {
-    const updatedTodos = todos.map((t) =>
-      t.id === todo.id
-        ? { ...t, title: updateTodo.title, details: updateTodo.details }
-        : t
-    );
-    setTodos(updatedTodos);
-    localStorage.setItem("todo", JSON.stringify(updatedTodos));
-    setShowUpdateDialog(false);
-  }
 
   //start Handle Update Dailog
-
+  function handleShowUpdateDialog() {
+    showUpdate(todo);
+  }
   //End Handle Update Dailog
   // ==== Event Handlers ===
   return (
     <>
-      {/* Delete Dialog */}
-      <Dialog
-        sx={{ direction: "rtl" }}
-        open={showDeleteDialog}
-        onClose={handleDeleteDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"هل أنت متأكد من رغبتك في حذف المهمة؟"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            الا يمكنك التراجع عن الحذف بعد إتمامه
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteDialogClose}>إغلاق</Button>
-          <Button onClick={handleDeleteConfirm} autoFocus>
-            نعم، قم بالحذف
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/*==== Delete Dialog ====*/}
-      {/* Update Dailog */}
-      <Dialog
-        sx={{ direction: "rtl" }}
-        open={showUpdateDialog}
-        onClose={handleUpdateDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"تعديل المهمة"}</DialogTitle>
-        <DialogContent>
-          <TextField
-            value={updateTodo.title}
-            onChange={(e) =>
-              setUpdateTodo({ ...updateTodo, title: e.target.value })
-            }
-            autoFocus
-            required
-            margin="dense"
-            id="title"
-            name="title"
-            label="عنوان المهمة"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            value={updateTodo.details}
-            onChange={(e) =>
-              setUpdateTodo({ ...updateTodo, details: e.target.value })
-            }
-            autoFocus
-            required
-            margin="dense"
-            id="details"
-            name="details"
-            label="التفاصيل"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleUpdateDialogClose}>إغلاق</Button>
-          <Button onClick={handleUpdateConfirm} autoFocus>
-            تاكيد
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* == Update Dailog == */}
       {/* Start Carde */}
       <Card
         className="todoCard"
@@ -216,7 +107,7 @@ export default function Todo({ todo }) {
 
               {/* Delete Icon */}
               <IconButton
-                onClick={handleShowDialog}
+                onClick={showDeleteDialog}
                 className="iconButton"
                 aria-label="Delete"
                 sx={{
