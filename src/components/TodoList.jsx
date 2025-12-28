@@ -18,7 +18,7 @@ import TextField from "@mui/material/TextField";
 // Others
 import { v4 as uuidv4 } from "uuid";
 // Use State
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import { TodosContext } from "../contexts/TodosContext";
 
 export default function TodoList() {
@@ -27,8 +27,14 @@ export default function TodoList() {
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
   //   Handle display completed or not completed
-  const completedTodos = todos.filter((t) => t.isCompleted);
-  const notCompletedTodos = todos.filter((t) => !t.isCompleted);
+  const completedTodos = useMemo(() => {
+    console.log("this is from completed");
+    return todos.filter((t) => t.isCompleted);
+  }, [todos]);
+  const notCompletedTodos = useMemo(() => {
+    console.log("this is from not completed");
+    return todos.filter((t) => !t.isCompleted);
+  }, [todos]);
 
   let todosToBeRendered = todos;
 
@@ -44,7 +50,7 @@ export default function TodoList() {
   });
 
   useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem("todo"));
+    const storageTodos = JSON.parse(localStorage.getItem("todo")) ?? [];
     setTodos(storageTodos);
   }, []);
 
@@ -69,7 +75,7 @@ export default function TodoList() {
   return (
     <Container maxWidth="sm" style={{ textAlign: "center" }}>
       {/* Start Carde */}
-      <Card sx={{ minWidth: 275 }}>
+      <Card sx={{ minWidth: 275, maxHeight: "80vh", overflow: "scroll" }}>
         <CardContent>
           <Typography variant="h2">مهامي</Typography>
           <Divider />
@@ -109,6 +115,7 @@ export default function TodoList() {
                 onClick={() => {
                   handleAddClick();
                 }}
+                disabled={titleInput.length == 0}
               >
                 اضافة
               </Button>

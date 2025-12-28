@@ -10,6 +10,11 @@ const theme = createTheme({
   typography: {
     fontFamily: ["Alexandria"],
   },
+  palette: {
+    primary: {
+      main: "#4527a0",
+    },
+  },
 });
 
 let todoList = [
