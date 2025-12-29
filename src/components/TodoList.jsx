@@ -17,8 +17,9 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 // Others
 import { v4 as uuidv4 } from "uuid";
-// Use State
+// Use hoks
 import { useState, useContext, useEffect, useMemo } from "react";
+import { ToastContext } from "../contexts/ToastContext";
 import { TodosContext } from "../contexts/TodosContext";
 // Dialog
 import Dialog from "@mui/material/Dialog";
@@ -29,6 +30,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
   const [titleInput, setTitleInput] = useState("");
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
@@ -73,6 +75,7 @@ export default function TodoList() {
     setTodos(newTodos);
     localStorage.setItem("todo", JSON.stringify(newTodos));
     setShowDeleteDialog(false);
+    showHideToast("تم الحذف بنجاح");
   }
   //End Handle Delete Dailog
 
@@ -95,6 +98,7 @@ export default function TodoList() {
     setTodos(updatedTodos);
     localStorage.setItem("todo", JSON.stringify(updatedTodos));
     setShowUpdateDialog(false);
+    showHideToast("تم تعديل بنجاح");
   }
   //End Handle Update Dailog
 
@@ -114,6 +118,7 @@ export default function TodoList() {
     setTodos(updatedTodos);
     localStorage.setItem("todo", JSON.stringify(updatedTodos));
     setTitleInput("");
+    showHideToast("تمت الاظافة بنجاح");
   }
 
   const todosJsx = todosToBeRendered.map((todo) => {
@@ -142,7 +147,7 @@ export default function TodoList() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            الا يمكنك التراجع عن الحذف بعد إتمامه
+            لا يمكنك التراجع عن الحذف بعد إتمامه
           </DialogContentText>
         </DialogContent>
         <DialogActions>
