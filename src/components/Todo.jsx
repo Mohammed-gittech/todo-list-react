@@ -11,24 +11,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 //
 import IconButton from "@mui/material/IconButton";
 
-import { TodosContext } from "../contexts/TodosContext";
-import { ToastContext } from "../contexts/ToastContext";
-import { useContext } from "react";
-
-//
-import TextField from "@mui/material/TextField";
+import { useTodos } from "../contexts/TodosContext";
+import { useToast } from "../contexts/ToastContext";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
-  const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(ToastContext);
+  const { dispatch } = useTodos();
+  const { showHideToast } = useToast();
   // Event Handlers
   function handleCheckClick() {
-    const updatedTodos = todos.map((t) =>
-      t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
-    );
-
-    setTodos(updatedTodos);
-    localStorage.setItem("todo", JSON.stringify(updatedTodos));
+    dispatch({ type: "checked", payload: todo });
     showHideToast("تم التعديل بنجاح");
   }
 
