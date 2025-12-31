@@ -19,7 +19,7 @@ export default function Todo({ todo, showDelete, showUpdate }) {
   const { showHideToast } = useToast();
   // Event Handlers
   function handleCheckClick() {
-    dispatch({ type: "checked", payload: todo });
+    dispatch({ type: "toggledCompleted", payload: todo });
     showHideToast("تم التعديل بنجاح");
   }
 

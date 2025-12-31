@@ -35,7 +35,7 @@ export default function todosReducer(currentTodos, action) {
       localStorage.setItem("todo", JSON.stringify(updatedTodos));
       return updatedTodos;
     }
-    case "checked": {
+    case "toggledCompleted": {
       const updatedTodos = currentTodos.map((t) =>
         t.id === action.payload.id ? { ...t, isCompleted: !t.isCompleted } : t
       );
