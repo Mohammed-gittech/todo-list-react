@@ -71,3 +71,45 @@ Todos are stored in the browser LocalStorage to ensure data persistence.
 - Todos are saved automatically on every state change using useEffect
 
 This prevents data loss after page refresh.
+
+---
+
+## ⚙️ Installation & Run Locally
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Mohammed-gittech/todo-list-react.git
+
+2.	Navigate to the project folder:
+cd todo-list-react
+3.	Install dependencies:
+npm install
+4.	Run the project:
+npm run dev
+
+---
+
+## 🎯 Learning Outcomes
+
+Through this project, I practiced:
+
+- Managing complex state using useReducer
+- Persisting data with LocalStorage
+- Using useEffect for side effects
+- Writing clean and scalable React code
+- Component-based architecture
+- Immutable state updates
+- Git & GitHub workflow with multiple commits
+
+---
+
+## 👨‍💻 Author
+
+**Mohammed Abd**
+Junior Frontend Developer
+React Developer 🚀
+
+GitHub:
+https://github.com/Mohammed-gittech
+```
